@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<!-- Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Street Light</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+
+        }
+
+        .container {
+            margin-top: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .info-item, .log-table {
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-title {
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-title i {
+            margin-right: 8px;
+        }
+
+        .info-value {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <a href="/" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div id="latest-record" class="info-item">
+        <div class="info-title"><i class="fas fa-microchip"></i> Device ID</div>
+        <div class="info-value" id="device-id">{{ data.device_id }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-title"><i class="fas fa-envelope"></i> Event</div>
+        <div class="info-value" id="event">{{ data.event }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-title"><i class="fas fa-clock"></i> Update Time</div>
+        <div class="info-value" id="update-time">{{ data.update_time }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-title"><i class="fas fa-sun"></i> Brightness</div>
+        <div class="info-value" id="brightness">{{ data.brightness }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-title"><i class="fas fa-toggle-on"></i> Switch</div>
+        <div class="info-value" id="switch">
+            {% if data.switch == 1 %}
+                ON
+            {% else %}
+                OFF
+            {% endif %}
+        </div>
+    </div>
+    <div class="info-item">
+        <div class="info-title"><i class="fas fa-wrench"></i> Maintenance</div>
+        <div class="info-value" id="maintenance">
+            {% if data.maintenance == 1 %}
+                Maintenance Needed!
+            {% else %}
+                Everything is OK
+            {% endif %}
+        </div>
+    </div>
+    <div class="info-item">
+        <div class="info-title"><i class="fa-solid fa-location-dot"></i> Location</div>
+        <div class="info-value" id="location">{{ data.location }}</div>
+    </div>
+</div>
+
+
+<div class="container mt-4">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    // 假设 histData 包含了多个记录，每个记录有 update_time 和 brightness 属性
+    // 示例数据格式：[{ "update_time": "2023-01-01", "brightness": 12 }, ...]
+    const histData = {{ hist_data | safe }};
+    console.log("histData")
+    console.log(histData)
+    histData.sort(function (a, b) {
+        // 将日期字符串转换为 JavaScript Date 对象
+        const dateA = new Date(a.update_time);
+        const dateB = new Date(b.update_time);
+
+        return dateA - dateB;
+    });
+    console.log(histData)
+    // 将 histData 转换为两个分离的数组，一个用于 x 轴，一个用于 y 轴
+    var xValues = histData.map(function (record) {
+        return record.update_time;
+    });
+
+
+    console.log(xValues);
+
+    var yValues = histData.map(function (record) {
+        return parseFloat(record.brightness.replace('%', ''));
+    });
+    console.log(yValues);
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: xValues, // 使用时间数据作为 x 轴标签
+            datasets: [{
+                label: 'Trend of Brightness Over Time',
+                data: yValues, // 使用亮度数据作为 y 轴数据
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: false,
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+<div class="container">
+    <div class="log-table">
+        <h5>History Logs</h5>
+        <div class="table-responsive">
+            <table class="table table-striped" id="log-table">
+                <thead>
+                <tr>
+                    <th scope="col">Timestamp</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Switch</th>
+                    <th scope="col">Brightness</th>
+                    <th scope="col">Maintenance</th>
+                    <th scope="col">Location</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                <!-- 历史记录表格数据，此部分不变 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    histData.sort(function (a, b) {
+        const dateA = new Date(a.update_time);
+        const dateB = new Date(b.update_time);
+
+        return dateB - dateA;
+    });
+    // 获取表格的tbody元素
+    const tableBody = document.getElementById('table-body');
+
+    if (histData.length === 0) {
+        const noDataRow = document.createElement('tr');
+        const noDataCell = document.createElement('td');
+        noDataCell.textContent = 'No history log';
+        noDataCell.colSpan = 6; // 合并6列
+        noDataRow.appendChild(noDataCell);
+        tableBody.appendChild(noDataRow);
+    } else {
+        // 遍历历史数据并创建表格行
+        histData.forEach(record => {
+            const row = document.createElement('tr');
+
+            // 创建表格单元格并设置其内容
+            const timestampCell = document.createElement('td');
+            timestampCell.textContent = record.update_time;
+
+            const eventCell = document.createElement('td');
+            eventCell.textContent = record.event;
+
+            const switchCell = document.createElement('td');
+            switchCell.textContent = record.switch;
+
+            const brightnessCell = document.createElement('td');
+            brightnessCell.textContent = record.brightness;
+
+            const maintenanceCell = document.createElement('td');
+            maintenanceCell.textContent = record.maintenance;
+
+            const locationCell = document.createElement('td');
+            locationCell.textContent = record.location;
+
+            // 将单元格添加到行中
+            row.appendChild(timestampCell);
+            row.appendChild(eventCell);
+            row.appendChild(switchCell);
+            row.appendChild(brightnessCell);
+            row.appendChild(maintenanceCell);
+            row.appendChild(locationCell);
+
+            // 将行添加到表格的tbody中
+            tableBody.appendChild(row);
+        });
+    }
+
+
+</script>
+
+</body>
+
+
+</html>
