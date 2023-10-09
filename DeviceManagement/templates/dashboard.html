@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Street Lights Dashboard (DEMO)</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            margin-top: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .smartlight-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .smartlight {
+            width: calc(33.33% - 20px); /* 一行显示三个设备，设置合适的宽度 */
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .smartlight:hover {
+            background-color: #f0f0f0;
+        }
+
+        .smartlight-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .smartlight-id {
+            font-weight: bold;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 最多显示两行 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 超出部分显示省略号 */
+        }
+
+        @media (max-width: 768px) {
+            .smartlight {
+                width: 100%; /* 在小屏幕上每行显示一个设备 */
+            }
+
+            .smartlight-icon {
+                font-size: 36px; /* 调整图标大小 */
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Smart Street Lights Dashboard (DEMO)</h1>
+    <div class="smartlight-container" id="smartlight-list">
+        <!-- Smart Street Lights will be displayed here -->
+    </div>
+</div>
+
+
+<script>
+    // 发出 GET 请求以获取后端传递的最新设备记录
+    fetch('/get_unique_device_records/')  // 根据您的URL路径设置
+        .then(response => response.json())
+        .then(data => {
+            // 处理返回的 JSON 数据
+            const smartlightList = document.getElementById('smartlight-list');
+
+            // 遍历后端传递的最新设备记录
+            data.latest_device_records.forEach(device => {
+                const smartLightElement = createSmartLightElement(device);
+                smartlightList.appendChild(smartLightElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
+    function convertTime() {
+        // 获取输入的时间值
+        let inputTime = document.getElementById("inputTime").value;
+
+        // 使用正则表达式替换T和Z
+        let outputTime = inputTime.replace("T", " ").replace("Z", "");
+
+        // 显示输出时间
+        document.getElementById("outputTime").innerText = outputTime;
+    }
+
+
+    // 修改函数，以接受从后端传递的设备数据
+    function createSmartLightElement(device) {
+        const smartLightElement = document.createElement('div');
+        smartLightElement.classList.add('smartlight');
+
+
+        smartLightElement.innerHTML = `
+                <div class="smartlight-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="smartlight-id">${device.device_id}</div>
+                <div>${device.location}</div>
+                <div>Brightness: ${device.brightness}</div>
+                <div>Last Update: ${device.update_time.replace("T", " ").replace("Z", "")}</div>
+            `;
+
+
+        smartLightElement.addEventListener('click', () => {
+            window.location.href = `/device/${device.device_id}`;
+        });
+
+        return smartLightElement;
+    }
+</script>
+</body>
+</html>
+</body>
+</html>
