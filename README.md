@@ -1,7 +1,5 @@
 # CITS5506_SmartLightManagement
-<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9117.JPG" width=100px>
-<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9116.JPG" width=100px>
-<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9115.JPG" width=100px>
+<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9117.JPG" width=200px><img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9116.JPG" width=200px><img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9115.JPG" width=200px>
 
 
 ## Project Requirement
