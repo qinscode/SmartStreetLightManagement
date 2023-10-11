@@ -1,7 +1,8 @@
 # CITS5506_SmartLightManagement
-![image](https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9117.JPG)
-![image](https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9116.JPG)
-![image](https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9115.JPG)
+<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9117.JPG" width=100px>
+<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9116.JPG" width=100px>
+<img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9115.JPG" width=100px>
+
 
 ## Project Requirement
 - Python 3.9.13
