@@ -1,4 +1,5 @@
 # CITS5506_SmartLightManagement
+A very simple device management system for CITS5506 project.
 <img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9117.JPG" width=200px><img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9116.JPG" width=200px><img src="https://github.com/realfudong/CITS5506_SmartLightManagement/blob/main/pics/IMG_9115.JPG" width=200px>
 
 
