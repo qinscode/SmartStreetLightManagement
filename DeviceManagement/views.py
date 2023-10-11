@@ -46,7 +46,6 @@ def get_unique_device_records(request):
         .annotate(max_update_time=Max('update_time'))
     )
 
-    #
     latest_device_records = LoraMessage.objects.filter(
         update_time__in=[device['max_update_time'] for device in latest_update_times]
     )
@@ -61,10 +60,9 @@ def get_unique_device_records(request):
         for record in latest_device_records
     ]
 
-    # 创建一个包含最新记录的字典
     response_data = {'latest_device_records': serialized_data}
 
-    # 使用JsonResponse返回JSON响应
+
     return JsonResponse(response_data, safe=False)
 
 

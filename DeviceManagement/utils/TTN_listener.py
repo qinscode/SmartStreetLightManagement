@@ -92,10 +92,8 @@ def insert_data_into_database(data_dict):
         # Define the SQL query to insert data into a table
         insert_query = "INSERT INTO `iot_app_loramessage` (device_id, event, update_time, brightness, switch, maintenance,location) VALUES (%(device_id)s, %(event)s, %(update_time)s, %(brightness)s, %(switch)s, %(maintenance)s, %(location)s)"
 
-        # Execute the SQL query with the data_dict
         cursor.execute(insert_query, data_dict)
 
-        # Commit the changes and close the connection
         connection.commit()
         connection.close()
         print("Data inserted into Azure MySQL database successfully.")
@@ -146,14 +144,10 @@ if __name__ == "__main__":
         "password": "baton-ague-WINCH",
         "database": "iot-database",
     }
+    CONNECTION_STRING = "HostName=iothub-utoipfc5sv5ho.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=25ebmPI+9QJ8CzcXKhB6tVUqv9U9Qc8emAIoTPF+9CI="
 
     latest_record_dict = get_latest_record()
     last_update_time = latest_record_dict.get('update_time')
-    print("Starting Server")
-    print(f"Last_update_time: {last_update_time}")
-    print("--------------------------------------")
-
-    CONNECTION_STRING = "HostName=iothub-utoipfc5sv5ho.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=25ebmPI+9QJ8CzcXKhB6tVUqv9U9Qc8emAIoTPF+9CI="
 
     while True:
         data_dict = list_device_twin_properties(CONNECTION_STRING)
@@ -164,15 +158,8 @@ if __name__ == "__main__":
 
         insert_data_into_database(data_dict)
 
-        print("Getting new message")
-        print(f"Device ID: {data_dict.get('device_id', 'N/A')}")
-        print(f"event: {data_dict.get('event', 'N/A')}")
-        print(f"Update Time (Perth): {data_dict.get('update_time', 'N/A')}")
-        print(f"Brightness: {data_dict.get('brightness', 'N/A')}")
-        print(f"Switch: {data_dict.get('switch', 'N/A')}")
-        print(f"Maintenance: {data_dict.get('maintenance', 'N/A')}")
-        print("--------------------------------------------------")  #
-
         last_update_time = data_dict.get('update_time')
 
         time.sleep(1)
+
+
