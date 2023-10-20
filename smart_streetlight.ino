@@ -76,14 +76,6 @@ void do_send(osjob_t *j) {
   // Read motion sensor
   int motionValue = digitalRead(motionSensorPin);
 
-  // payload[0] = highByte(lightValue);
-  // payload[1] = lowByte(lightValue);
-  // payload[2] = motionValue;
-  // payload[3] = 0; // Placeholder for future data
-  // payload[0] = lightValue;
-  // payload[1] = motionStateCurrent;
-  // payload[2] = ledBrightness;
-  // payload[3] = 0;  // Placeholder for future data
   Serial.print(sendDataEnabled);
   Serial.print(" ");
   Serial.print(mydata);
