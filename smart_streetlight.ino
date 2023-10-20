@@ -150,25 +150,6 @@ void setup() {
   // Start job
   do_send(&sendjob);
 
-
-  //   os_init();
-  //   LMIC_reset();
-  //   LMIC_setSession(0x1, DEVADDR, NWKSKEY, APPSKEY);
-  //   os_setCallback(&sendjob, do_send);
-
-  //   // Disable link check validation
-  //   LMIC_setLinkCheckMode(0);
-
-  //   // TTN uses SF9 for its RX2 window.
-  //   LMIC.dn2Dr = DR_SF9;
-
-  //   LMIC_setClockError(MAX_CLOCK_ERROR * 5 / 100);
-
-  //   // Set data rate and transmit power for uplink
-  //   LMIC_setDrTxpow(DR_SF7, 14);
-
-  //   // Start job
-  //   do_send(&sendjob);
 }
 
 void loop() {
